@@ -4,20 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <ul id="lista-graczy"></ul>
-  <hr>
-  <input type="text" id="name-id" placeholder="nazwa"> <br>
-  <input type="number" id="age-id" placeholder="wiek"> <br>
-  
-  <select id="race-id"></select>
-  <select id="profession-id"></select>
-  <select id="homeland-id"></select>
+  <!-- <ul id="lista-graczy"></ul> -->
+  <div id="left">
+    <div class="step step1">
+      <h2>Step #1</h2>
+      <h3>Who are you?</h3>
 
-  <br>
-  <input type="radio" name="gender" id="gender-male-id"> M <br>
-  <input type="radio" name="gender" id="gender-female-id"> F <br>
+      <input type="text" id="name-id" placeholder="nazwa"> <br>
+      <input type="number" id="age-id" placeholder="wiek"> <br>
+      
+      Race: <select id="race-id"></select> <br>
+      Profession: <select id="profession-id"></select> <br>
+      Homeland: <select id="origin-id"></select> <br>
+      
+      <input type="radio" name="gender" id="gender-male-id"> M <br>
+      <input type="radio" name="gender" id="gender-female-id"> F <br>
+      
+    </div>
+    <div class="step step2">
+      
+    </div>
+    <button id="prev-step-btn">⬅️</button>
+    <button id="next-step-btn">➡️</button>
+    <button id="create-hero-btn">➕🧝</button>
+  </div>
+  <div id="right">
+    <div id="right_header">
+      <div class="right_header_row">
+        <span>Name</span> <span id="name-output"></span>
+        <span>Age</span> <span id="age-output"></span>
+      </div>
+      <div class="right_header_row">
+        <span>Race</span> <span id="race-output"></span>
+        <span>Sex</span> <span id="gender-output"></span>
+      </div>
+      <div class="right_header_row">
+        <span>Profession</span> <span id="profession-output"></span>
+        <span>Homeland</span> <span id="origin-output"></span>
+      </div>
+    </div>
+  </div>
 
 
   

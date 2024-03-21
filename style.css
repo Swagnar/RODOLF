@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: .5rem;
+  display: grid;
+  column-gap: .5rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+}
+
+#left {
+  outline: 1px solid black;
+  padding: .5rem;
+}
+.step {
+  outline: 1px solid red;
+  padding: .5rem;
+}
+/* Hide all steps except the first one */
+.step:not(:first-of-type) {display: none;}
+
+#right {
+  outline: 1px solid black;
+}
+#right_header {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  padding: .5rem;
+  row-gap: .5rem;
+}
+.right_header_row {
+  display: flex;
+  justify-content: space-evenly;
+}
+#name-output {
+  flex-basis: 5rem;
+}
+#age-output {
+  flex-basis: 2rem;
+}
+#next-step-btn {
+  margin-top: .5rem;
+}
+span[id$=-output] {
+  outline: 1px solid black;
+  padding: .2rem;
+  text-align: center;
+}

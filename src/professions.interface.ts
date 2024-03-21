@@ -9,6 +9,24 @@ export interface IProfession {
   gear :string[]
 }
 
+export const Bard :IProfession = {
+  name: "Bard",
+  definingSkill: DefiningSkills.Busking,
+  vigor: 0,
+  professionSkills: [
+    // charisma
+    // deceit
+    // performance
+    // language
+    // human perception
+    // persuasion
+    Skills.INT.Streetwise,
+    // fine arts
+    // seduction
+    Skills.INT.SocialEtiquette
+  ],
+  gear: []
+}
 export const Mage :IProfession = {
   name: "Mage",
   definingSkill: DefiningSkills.MagicTraining,
@@ -48,5 +66,5 @@ export const Witcher :IProfession = {
 
 
 export const Professions :IProfession[] = [
-  Mage, Witcher
+  Bard, Mage, Witcher
 ]

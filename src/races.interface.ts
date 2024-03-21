@@ -31,10 +31,12 @@ const BlindlyStubborn :IPerk = {
   description: "Part of the human race’s greatest strength is its willingness to charge forward endlessly, even into truly life-threatening situations. A human can summon up their courage and reroll a failed Resist Coercion or Courage roll 3 times per game session. They take the higher of the two rolls, but if they still fail they cannot re-use the ability to roll again."
 }
 
-
+export const Witcher = new Race('Witcher', [])
+export const Elf = new Race('Elf', [])
+export const Dwarf = new Race('Dwarf', [])
 export const Human = new Race('Human', [Trustworthy, Ingenuity, BlindlyStubborn])
 
 export const Races :IRace[] = [
-  Human
+  Witcher, Elf, Human, Dwarf
 ]
 

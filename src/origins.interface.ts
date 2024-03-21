@@ -1,7 +1,7 @@
 import { ISkill, Skills } from "./skills.interface"
 import { Statistics } from "./statistics.interface"
 
-interface IOrigin {
+export interface IOrigin {
   name :string,
   region :"Northern Kingdoms" | "Nilfgaard" | "Elderlands",
   bonus :ISkill,
@@ -28,15 +28,19 @@ const DolBlathanna :IOrigin = {
   bonus: Skills.INT.SocialEtiquette,
   roll: "Elf"
 }
-
-export const Origins = {
-  NorthernKingdoms: {
-    Redania
-  },
-  Nilfgaard: {
-    Vicovaro
-  },
-  Elderlands: {
-
-  }
+const Mahakam :IOrigin = {
+  name: "Mahakam",
+  region: "Elderlands",
+  bonus: null,
+  roll: "Dwarf"
 }
+
+export const Origins = [
+    Redania,
+
+    Vicovaro,
+
+
+    DolBlathanna, 
+    Mahakam
+]
