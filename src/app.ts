@@ -50,10 +50,11 @@ var ChosenRace :IRace  //wtf?
 var ChosenProfession :IProfession
 var ChosenOrigin :IOrigin
 
+var currentStep = 0
+
 window.addEventListener('load', () => {
   initTags()
   
-  var currentStep = 0
 
   STEPS[currentStep].hidden = false
 
@@ -67,17 +68,16 @@ window.addEventListener('load', () => {
 
 
   NEXT_STEP_BTN.addEventListener('click', () => {
-    nextStep(currentStep++)
+    nextStep(currentStep)
   })
   PREV_STEP_BTN.addEventListener('click', () => {
     if(currentStep == 0) {
       alert("You can't go any backwards")
       return
     }
-    previousStep(currentStep--)
+    previousStep(currentStep)
   })
 
-  syncCard()
 })
 
 function createPlayer() {
@@ -248,10 +248,10 @@ function previousStep(currentStep: number): void {
   if (currentStep > 0 && currentStep <= STEPS.length) {
     STEPS[currentStep].style.display = "none"
     STEPS[currentStep - 1].style.display = "block"
+    currentStep--
   }
 }
 function nextStep(currentStep: number): void {
-  console.log(PLAYER)
   if(PLAYER == undefined) {
     alert("You can't advance further without creating a character first")
     return
@@ -259,6 +259,7 @@ function nextStep(currentStep: number): void {
   if (currentStep >= 0 && currentStep < STEPS.length - 1) {
     STEPS[currentStep].style.display = "none"
     STEPS[currentStep + 1].style.display = "block"
+    currentStep++
   }
 }
 // 96% sure I'll get rid of this function

@@ -5,8 +5,9 @@ body {
   column-gap: .5rem;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 100%;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-h2,h3 {
+h1,h2,h3,h4,h5 {
   margin: 0; 
 }
 
@@ -51,3 +52,18 @@ span[id$=-output] {
   padding: .2rem;
   text-align: center;
 }
+
+
+div[id$=-state],
+div[id$=-fate] {
+  display: flex;
+  flex-direction: column;
+}
+button[id^=roll-] {
+  width: fit-content;
+}
+
+
+
+
+.tac { text-align: center; }

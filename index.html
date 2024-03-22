@@ -25,15 +25,49 @@
       
     </div>
     <div class="step step2">
-      <h2>Step #2</h2>
-      <h3>Lifepath</h3>
+      <h2 class="tac">Step #2</h2>
+      <h3 class="tac">Lifepath</h3>
       <p>You've selected your origin as <span id="origin-step2-output"></span>, which means you'll get a +1 to your <span id="origin-bonus-output"></span></p>
 
-      <h4>Family</h4>
-      <button id="roll-family-state">Roll!</button> <br>
+      <h4 class="tac">Family</h4>
       <div id="family-state">
-        <input type="radio" name="family-radio" id="family-state-alive"> Your Family Is Alive and Together
-        <input type="radio" name="family-radio" id="family-state-misfortune"> Something Happened to Your Family
+        <h5>Family state</h5>
+        <button id="roll-family-state">Roll!</button>
+        <div class="flex-row">
+          <input type="radio" name="family-state-radio" id="family-state-alive"><span>Your Family Is Alive and Together</span>
+        </div>
+        <div class="flex-row">
+          <input type="radio" name="family-state-radio" id="family-state-misfortune"><span>Something Happened to Your Family</span>
+        </div>
+      </div>
+
+      <div id="parent-state">
+        <h5>Parent state</h5>
+        <button id="roll-parent-state">Roll!</button>
+        <div class="flex-row">
+          <input type="radio" name="parent-state-radio" id="parent-state-alive"><span>Your Parents Are Alive</span>
+        </div>
+        <div class="flex-row">
+          <input type="radio" name="parent-state-radio" id="parent-state-misfortune"><span>Something Happened To Your Parents</span>
+        </div>
+      </div>
+
+      <div id="family-fate">
+        <h5>Family fate</h5>
+        <button id="roll-family-fate">Roll!</button>
+        // tabelka na 26
+      </div>
+
+      <div id="parent-fate">
+        <h5>Parental Fate</h5>
+        <button id="roll-parent-fate">Roll!</button>
+        // tabelka na 27
+      </div>
+
+      <div id="family-status">
+        <h5>Family Status</h5>
+        <button id="roll-family-status">Roll!</button>
+        // tabelka na 28
       </div>
 
 
