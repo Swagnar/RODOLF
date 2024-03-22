@@ -25,20 +25,30 @@ const RACES_TAG = <HTMLSelectElement>document.getElementById('race-id')
 const PROFESSIONS_TAG = <HTMLSelectElement>document.getElementById('profession-id')
 const ORIGINS_TAG = <HTMLSelectElement>document.getElementById('origin-id')
 
-
+// Step 1
 const NAME_OUTPUT = document.getElementById('name-output')
 const AGE_OUTPUT = document.getElementById('age-output')
 const RACE_OUTPUT = document.getElementById('race-output')
 const PROFESSION_OUTPUT = document.getElementById('profession-output')
 const ORIGIN_OUTPUT = document.getElementById('origin-output')
 
+
+// Step 2
+const FAMILY_STATE = document.getElementById('family-state')
+const FAMILY_RADIO_ALIVE = <HTMLInputElement>document.getElementById('family-state-alive')
+const FAMILY_RADIO_MISFORTUNE = <HTMLInputElement>document.getElementById('family-state-misfortune')
+
+const ORIGIN_OUTPUT_2 = document.getElementById('origin-step2-output')
+const ORIGIN_BONUS_OUTPUT = document.getElementById('origin-bonus-output')
+
 // TODO: List of created characters
-const PLAYERS :Player[] = []
+// const PLAYERS :Player[] = []
 
+var PLAYER :Player
 
-// const PLAYER :Player = JSON.parse(localStorage.getItem('player')) ?? {}
-
-
+var ChosenRace :IRace  //wtf?
+var ChosenProfession :IProfession
+var ChosenOrigin :IOrigin
 
 window.addEventListener('load', () => {
   initTags()
@@ -48,13 +58,14 @@ window.addEventListener('load', () => {
   STEPS[currentStep].hidden = false
 
   if(JSON.parse(localStorage.getItem('player')) == null) {
-    createPlayer()
+    // createPlayer()
   }
+  
+  ChosenRace = Races.find(r => r.name.toLowerCase() == RACES_TAG.value)
+  ChosenProfession = Professions.find(prof => prof.name.toLowerCase() == PROFESSIONS_TAG.value)
+  ChosenOrigin = Origins.find(o => o.name.toLowerCase() == ORIGINS_TAG.value)
 
-  
 
-  
-  
   NEXT_STEP_BTN.addEventListener('click', () => {
     nextStep(currentStep++)
   })
@@ -69,60 +80,118 @@ window.addEventListener('load', () => {
   syncCard()
 })
 
-
 function createPlayer() {
-
-  const selectedRace       :IRace       = Races.find(race => race.name == capitalizedString(RACES_TAG.value))
-  const selectedProfession :IProfession = Professions.find(prof => prof.name == String(PROFESSIONS_TAG.value.charAt(0).toUpperCase() + PROFESSIONS_TAG.value.slice(1)))
-  const selectedOrigin     :IOrigin     = Origins.find(origin => origin.name == String(ORIGINS_TAG.value.charAt(0).toUpperCase() + ORIGINS_TAG.value.slice(1)))
-
-  if(!selectedRace) throw new Error('Invalid race selected')
-  if(!selectedProfession) throw new Error('Invalid profession selected')
-  if(!selectedOrigin) throw new Error('Invalid origin selected')
+  try {
+    if(!ChosenRace) throw new Error('Invalid race selected')
+    if(!ChosenProfession) throw new Error('Invalid profession selected')
+    if(!ChosenOrigin) throw new Error('Invalid origin selected')
 
 
-  const PLAYER = new Player(
-    NAME_TAG.value,
-    Number(AGE_TAG.value),
-    selectedRace,
-    selectedProfession,
-    selectedOrigin
-  )
+    PLAYER = new Player(
+      NAME_TAG.value,
+      Number(AGE_TAG.value),
+      ChosenRace,      
+      ChosenProfession, 
+      ChosenOrigin
+    )
 
-  PLAYERS.push(PLAYER)
-  console.log(`Created new player!`, PLAYER)
+    // PLAYERS.push(PLAYER)
+    console.log(`Created new player!`, PLAYER)
+  } catch(e) {
+    console.error(e)
+    alert(e.message)
+  }
 }
 
-function initTags() {
+/**
+ * Adds event listeners to HTML tags, runs functions that check what Professions 
+ * and Origins are avaiable for selected race (deafult `<select>` value on boot).
+ * Also, dispatches a `change` event that assigns objects from exported Arrays, to variables 
+ * `ChosenRace`, `ChosenProfession` and `ChosenOrigin`
+ */
+function initTags(): void {
   Races.forEach(race => {
     let opt = document.createElement('option')
     opt.value = race.name.toLowerCase()
     opt.innerText = race.name
     RACES_TAG.append(opt)
   });
+
   RACES_TAG.addEventListener('change', (e) => {
-    const selectedRace = (e.target as HTMLSelectElement).value
-    RACE_OUTPUT.innerText = selectedRace
-    updateProfessionsOptions(selectedRace)
-    updateOriginsOptions(selectedRace)
+    try {
+      ChosenRace = Races.find(r => r.name.toLowerCase() == (e.target as HTMLSelectElement).value)
+      if(ChosenRace) {
+        RACE_OUTPUT.innerText = ChosenRace.name
+        updateProfessionsOptions(ChosenRace.name)
+        updateOriginsOptions(ChosenRace.name)
+      } else {
+        throw new ReferenceError('Something went wrong while selecting profession')
+      }
+    } catch(e) { console.error(e) }
   })
+
   PROFESSIONS_TAG.addEventListener('change', (e) => {
-    const selectedProfession = (e.target as HTMLSelectElement).value
-    PROFESSION_OUTPUT.innerText = selectedProfession
+    try {
+      ChosenProfession = Professions.find(prof => prof.name.toLowerCase() == (e.target as HTMLSelectElement).value)
+      if(ChosenProfession) {
+        PROFESSION_OUTPUT.innerText = ChosenProfession.name
+      } else {
+        throw new ReferenceError('Something went wrong while selecting profession')
+      }
+    } catch(e) { console.error(e) }
   })
+
   ORIGINS_TAG.addEventListener('change', (e) => {
-    const selectedOrigin = (e.target as HTMLSelectElement).value
-    ORIGIN_OUTPUT.innerText = selectedOrigin
+    try {
+      ChosenOrigin = Origins.find(o => o.name.toLowerCase() == (e.target as HTMLSelectElement).value)
+      if(ChosenOrigin) {
+        ORIGIN_OUTPUT.innerText = ChosenOrigin.name
+        ORIGIN_OUTPUT_2.innerText = ChosenOrigin.name
+        ORIGIN_BONUS_OUTPUT.innerText = ChosenOrigin.bonus.name
+      } else {
+        throw new ReferenceError('Something went wrong while selecting origin')
+      }
+    } catch (e) { console.error(e) }
   })
+
+
   NAME_TAG.addEventListener('input', () => { NAME_OUTPUT.innerText = NAME_TAG.value })
   AGE_TAG.addEventListener('input', () => { AGE_OUTPUT.innerText = AGE_TAG.value })
+  
+  
+  document.getElementById('roll-family-state').addEventListener('click', () => {
+    const roll = roll10() % 2 == 0 ? "even" : "odd"
+
+    FAMILY_RADIO_ALIVE.checked = roll == "even"
+    FAMILY_RADIO_ALIVE.disabled = roll == "odd" 
+
+    FAMILY_RADIO_MISFORTUNE.checked = roll == "odd" 
+    FAMILY_RADIO_MISFORTUNE.disabled = roll == "even" 
+  })
   
   document.getElementById('create-hero-btn').addEventListener('click', () => {
     createPlayer()
   })
+
   updateProfessionsOptions(RACES_TAG.value)
   updateOriginsOptions(RACES_TAG.value)
+
+  // When the app is rendered, use default values of each select tag and run change event
+  // Why so? I wanted my ChosenX variables to be set during initial boot, but not with literals
+  // I didn't want to initialize them with empty values. Or can I?
+  Array(RACES_TAG, PROFESSIONS_TAG, ORIGINS_TAG).forEach(TAG => TAG.dispatchEvent(new Event('change')))
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Updates the Profession `<select>` tag, to that only avaiable professions for given race are shown
@@ -147,8 +216,12 @@ function updateProfessionsOptions(selectedRace :string) :void{
   PROFESSIONS_TAG.dispatchEvent(changeEvent)
   
 }
-function updateOriginsOptions(selectedRace :string) :void{
-  const unavaiableOrigins = unavaiableOriginsByRace[selectedRace.toLowerCase()] ?? []
+/**
+ * Updates the Origins `<select>` tag, to that only avaiable origins and homelands for given race are shown
+ * @param selectedOrigin name of the selected origin
+ */
+function updateOriginsOptions(selectedOrigin :string) :void{
+  const unavaiableOrigins = unavaiableOriginsByRace[selectedOrigin.toLowerCase()] ?? []
   ORIGINS_TAG.innerHTML = ''
   Origins.forEach(origin => {
     if(!unavaiableOrigins.includes(origin.name.toLowerCase())) {
@@ -163,6 +236,13 @@ function updateOriginsOptions(selectedRace :string) :void{
 
 
 
+
+
+
+
+
+
+
 // utils
 function previousStep(currentStep: number): void {
   if (currentStep > 0 && currentStep <= STEPS.length) {
@@ -171,14 +251,17 @@ function previousStep(currentStep: number): void {
   }
 }
 function nextStep(currentStep: number): void {
+  console.log(PLAYER)
+  if(PLAYER == undefined) {
+    alert("You can't advance further without creating a character first")
+    return
+  }
   if (currentStep >= 0 && currentStep < STEPS.length - 1) {
     STEPS[currentStep].style.display = "none"
     STEPS[currentStep + 1].style.display = "block"
   }
 }
-function capitalizedString(value :string) :string{
-  return String(value.charAt(0).toUpperCase() + value.slice(1))
-}
+// 96% sure I'll get rid of this function
 function syncCard() {
   NAME_OUTPUT.innerText = NAME_TAG.value
   AGE_OUTPUT.innerText = AGE_TAG.value
@@ -186,6 +269,8 @@ function syncCard() {
   PROFESSION_OUTPUT.innerText = PROFESSIONS_TAG.value
   ORIGIN_OUTPUT.innerText = ORIGINS_TAG.value
 }
+function roll20() :number { return Math.floor(Math.random() * 20) + 1 }
+function roll10() :number { return Math.floor(Math.random() * 10) + 1 }
 function syncPlayer() {}
 
 

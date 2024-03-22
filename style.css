@@ -6,6 +6,9 @@ body {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 100%;
 }
+h2,h3 {
+  margin: 0; 
+}
 
 #left {
   outline: 1px solid black;
@@ -30,6 +33,9 @@ body {
 .right_header_row {
   display: flex;
   justify-content: space-evenly;
+}
+.rolled-output {
+  text-decoration: underline;
 }
 #name-output {
   flex-basis: 5rem;
