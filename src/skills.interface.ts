@@ -32,7 +32,14 @@ const SkillDescriptions = {
   Stealth: '',
   Physique: '',
   Endurance: '',
-
+  Charisma: '',
+  Deceit: '',
+  Gambling: '',
+  GroomingAndStyle: '',
+  HumanPerception: '',
+  Leadership: '',
+  Persuasion: '',
+  Seduction: '',
 
   // Defining skills
   MagicTraining: 'To qualify as a Mage a magically adept person must pass through the halls of one of the world’s magical academies and learn the fun- damentals of the magical arts. A Mage can roll Magical Training whenever they encounter a magical phenomenon, an unknown spell, or a question of magical theory. The DC is set by the GM, and a success allows the Mage to learn everything there is to know about the phenomenon. Magical Training can also be rolled as a form of Awareness that detects magical beings, spells, and hexes',
@@ -232,6 +239,65 @@ export const Endurance :ISkill = {
   isHard: false,
   value: 0
 }
+//***************************************************** */
+//                        EMPATHY                       */
+//***************************************************** */
+// Urok
+export const Charisma :ISkill = {
+  name: 'Endurance',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Oszustwo
+export const Deceit :ISkill = {
+  name: 'Deceit',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Hazard
+export const Gambling :ISkill = {
+  name: 'Gambling',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Styl
+export const GroomingAndStyle :ISkill = {
+  name: 'Grooming & Style',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Empatia
+export const HumanPerception :ISkill = {
+  name: 'HumanPerception',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Przywództwo
+export const Leadership :ISkill = {
+  name: 'Leadership',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Perswazja
+export const Persuasion :ISkill = {
+  name: 'Persuasion',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
+// Amory
+export const Seduction :ISkill = {
+  name: 'Seduction',
+  statistics: Statistics.EMP,
+  isHard: false,
+  value: 0
+}
 
 
 
@@ -277,7 +343,9 @@ export const Skills = {
   BODY: {
     Physique, Endurance
   },
-  EMP: {},
+  EMP: {
+    Charisma, Deceit, Gambling, GroomingAndStyle, HumanPerception, Leadership, Persuasion, Seduction
+  },
   CRA: {},
   WILL: {},
   LUCK: {}

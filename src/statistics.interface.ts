@@ -20,12 +20,12 @@ export const EMP = new Statistic('Empathy', 'EMP')
 export const CRA = new Statistic('Craft', 'CRA')
 export const WILL = new Statistic('Will', 'WILL')
 export const LUCK = new Statistic('Luck', 'LUCK')
-
+export const REP = new Statistic('Reputation', 'REP')
 /**
  * Object containing all statistics
  */
 export const Statistics = {
-  INT, REF, DEX, BODY, EMP, CRA, WILL, LUCK
+  INT, REF, DEX, BODY, EMP, CRA, WILL, LUCK, REP
 }
 
 

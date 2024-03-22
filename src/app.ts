@@ -3,16 +3,8 @@ import { IRace, Races } from "./races.interface"
 import { IOrigin, Origins } from "./origins.interface"
 import { Player } from "./player.model"
 
-const unavaiableProfessionsByRace :Record<string, string[]> = {
-  "dwarf": ["witcher"],
-  "elf": ["witcher"],
-  "human": ["witcher"],
-  "witcher": ["bard", "craftsman", "criminal", "doctor", "mage", "man at arms", "merchant", "priest"],
-  "halfling": ["mage", "priest"]
-}
-const unavaiableOriginsByRace :Record<string, string[]> = {
-  "human": ["dol blathanna", 'mahakam']
-}
+import { returnBlankOptionTag, updateProfessionsOptions, updateOriginsOptions } from "./utils/helpers"
+import { roll20, roll10 } from "./utils/rolls"
 
 const STEPS = Array.from(document.querySelectorAll('.step')).map(el => el as HTMLElement)
 const NEXT_STEP_BTN = <HTMLButtonElement>document.getElementById('next-step-btn')
@@ -58,25 +50,12 @@ window.addEventListener('load', () => {
 
   STEPS[currentStep].hidden = false
 
-  if(JSON.parse(localStorage.getItem('player')) == null) {
-    // createPlayer()
-  }
+  // if(JSON.parse(localStorage.getItem('player')) == null) {
+  //   createPlayer()
+  // }
+
+
   
-  ChosenRace = Races.find(r => r.name.toLowerCase() == RACES_TAG.value)
-  ChosenProfession = Professions.find(prof => prof.name.toLowerCase() == PROFESSIONS_TAG.value)
-  ChosenOrigin = Origins.find(o => o.name.toLowerCase() == ORIGINS_TAG.value)
-
-
-  NEXT_STEP_BTN.addEventListener('click', () => {
-    nextStep(currentStep)
-  })
-  PREV_STEP_BTN.addEventListener('click', () => {
-    if(currentStep == 0) {
-      alert("You can't go any backwards")
-      return
-    }
-    previousStep(currentStep)
-  })
 
 })
 
@@ -110,6 +89,7 @@ function createPlayer() {
  * `ChosenRace`, `ChosenProfession` and `ChosenOrigin`
  */
 function initTags(): void {
+  RACES_TAG.append(returnBlankOptionTag())
   Races.forEach(race => {
     let opt = document.createElement('option')
     opt.value = race.name.toLowerCase()
@@ -122,8 +102,8 @@ function initTags(): void {
       ChosenRace = Races.find(r => r.name.toLowerCase() == (e.target as HTMLSelectElement).value)
       if(ChosenRace) {
         RACE_OUTPUT.innerText = ChosenRace.name
-        updateProfessionsOptions(ChosenRace.name)
-        updateOriginsOptions(ChosenRace.name)
+        updateProfessionsOptions(PROFESSIONS_TAG, ChosenRace.name)
+        updateOriginsOptions(ORIGINS_TAG, ChosenRace.name)
       } else {
         throw new ReferenceError('Something went wrong while selecting profession')
       }
@@ -154,6 +134,16 @@ function initTags(): void {
     } catch (e) { console.error(e) }
   })
 
+  NEXT_STEP_BTN.addEventListener('click', () => {
+    nextStep(currentStep)
+  })
+  PREV_STEP_BTN.addEventListener('click', () => {
+    if(currentStep == 0) {
+      alert("You can't go any backwards")
+      return
+    }
+    previousStep(currentStep)
+  })
 
   NAME_TAG.addEventListener('input', () => { NAME_OUTPUT.innerText = NAME_TAG.value })
   AGE_TAG.addEventListener('input', () => { AGE_OUTPUT.innerText = AGE_TAG.value })
@@ -173,77 +163,10 @@ function initTags(): void {
     createPlayer()
   })
 
-  updateProfessionsOptions(RACES_TAG.value)
-  updateOriginsOptions(RACES_TAG.value)
-
-  // When the app is rendered, use default values of each select tag and run change event
-  // Why so? I wanted my ChosenX variables to be set during initial boot, but not with literals
-  // I didn't want to initialize them with empty values. Or can I?
-  Array(RACES_TAG, PROFESSIONS_TAG, ORIGINS_TAG).forEach(TAG => TAG.dispatchEvent(new Event('change')))
+  updateProfessionsOptions(PROFESSIONS_TAG, RACES_TAG.value)
+  updateOriginsOptions(ORIGINS_TAG, RACES_TAG.value)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Updates the Profession `<select>` tag, to that only avaiable professions for given race are shown
- * @param selectedRace name of the selected race
- */
-function updateProfessionsOptions(selectedRace :string) :void{
-  const unavaiableProfessions = unavaiableProfessionsByRace[selectedRace.toLowerCase()] ?? []
-  PROFESSIONS_TAG.innerHTML = ''
-  Professions.forEach(prof => {
-    if(!unavaiableProfessions.includes(prof.name.toLowerCase())) {
-      let opt = document.createElement('option')
-      opt.value = prof.name.toLowerCase()
-      opt.innerText = prof.name
-      PROFESSIONS_TAG.append(opt)
-    }
-  })
-  
-  // Updates the rest of the tags during initial window boot
-  const selectedProfession = PROFESSIONS_TAG.options[0].value
-  PROFESSION_OUTPUT.innerText = selectedProfession
-  const changeEvent = new Event('change')
-  PROFESSIONS_TAG.dispatchEvent(changeEvent)
-  
-}
-/**
- * Updates the Origins `<select>` tag, to that only avaiable origins and homelands for given race are shown
- * @param selectedOrigin name of the selected origin
- */
-function updateOriginsOptions(selectedOrigin :string) :void{
-  const unavaiableOrigins = unavaiableOriginsByRace[selectedOrigin.toLowerCase()] ?? []
-  ORIGINS_TAG.innerHTML = ''
-  Origins.forEach(origin => {
-    if(!unavaiableOrigins.includes(origin.name.toLowerCase())) {
-      let opt = document.createElement('option')
-      opt.value = origin.name.toLowerCase()
-      opt.innerText = origin.name
-      ORIGINS_TAG.append(opt)
-    }
-  })
-}
-
-
-
-
-
-
-
-
-
-
-
-// utils
 function previousStep(currentStep: number): void {
   if (currentStep > 0 && currentStep <= STEPS.length) {
     STEPS[currentStep].style.display = "none"
@@ -262,17 +185,8 @@ function nextStep(currentStep: number): void {
     currentStep++
   }
 }
-// 96% sure I'll get rid of this function
-function syncCard() {
-  NAME_OUTPUT.innerText = NAME_TAG.value
-  AGE_OUTPUT.innerText = AGE_TAG.value
-  RACE_OUTPUT.innerText = RACES_TAG.value
-  PROFESSION_OUTPUT.innerText = PROFESSIONS_TAG.value
-  ORIGIN_OUTPUT.innerText = ORIGINS_TAG.value
-}
-function roll20() :number { return Math.floor(Math.random() * 20) + 1 }
-function roll10() :number { return Math.floor(Math.random() * 10) + 1 }
-function syncPlayer() {}
+
+
 
 
 
