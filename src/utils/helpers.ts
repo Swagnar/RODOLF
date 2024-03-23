@@ -70,5 +70,3 @@ export function updateOriginsOptions(originsSelectTag :HTMLSelectElement, select
   }
 }
 
-
-

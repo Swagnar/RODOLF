@@ -1,59 +1,42 @@
+:root {
+  --clr-bg-900: #303030;
+  --clr-bg-600: #505050;
+  --clr-bg-300: #707070;
+
+  --clr-text: #dfdfdf;
+
+  --tiles-gap: .2rem;
+}
+
 body {
+  background-color: var(--clr-bg-900); 
+
+  /* background-image: url('src/bgc-paper.jpg'); */
+  /* background-size: cover; */
+  height: calc(100vh - 1rem);
   margin: 0;
   padding: .5rem;
+  
   display: grid;
   column-gap: .5rem;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 100%;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  position: relative;
+  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--clr-text);
+
 }
 h1,h2,h3,h4,h5 {
   margin: 0; 
 }
-
-#left {
-  outline: 1px solid black;
-  padding: .5rem;
-}
-.step {
-  outline: 1px solid red;
-  padding: .5rem;
-}
-/* Hide all steps except the first one */
-.step:not(:first-of-type) {display: none;}
-
-#right {
-  outline: 1px solid black;
-}
-#right_header {
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  padding: .5rem;
-  row-gap: .5rem;
-}
-.right_header_row {
-  display: flex;
-  justify-content: space-evenly;
-}
-.rolled-output {
-  text-decoration: underline;
-}
-#name-output {
-  flex-basis: 5rem;
-}
-#age-output {
-  flex-basis: 2rem;
-}
-#next-step-btn {
-  margin-top: .5rem;
-}
 span[id$=-output] {
-  outline: 1px solid black;
+  outline: 1px solid rgba(0,0,0,.25);
   padding: .2rem;
   text-align: center;
+  min-height: 1.35rem;
 }
-
-
 div[id$=-state],
 div[id$=-fate] {
   display: flex;
@@ -64,6 +47,145 @@ button[id^=roll-] {
 }
 
 
+#embers {
+  margin-top: 22rem;
+}
+
+#left,
+#right {
+  /* outline: 1px solid var(--clr-bg-300); */
+  padding: 1.5rem;
+}
+.left-wrapper,
+.right-wrapper {
+  height: 100%;
+}
+
+#left {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#right {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  max-width: calc(50% - 3rem);
+}
+.left-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.input-wrapper {
+  margin-top: var(--tiles-gap);
+  display: flex;
+  flex-flow: row wrap;
+  gap: var(--tiles-gap);
+  padding: .5rem;
+}
+
+.input-field {
+  background-color: var(--clr-bg-300);
+  width: calc(100% - .2rem);
+  display: flex;
+  flex-direction: column;
+}
+.input-field.first-input-row {
+  flex-basis: calc(50% - var(--tiles-gap));
+}
+.input-field-radio {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+.input-field-radio > label {
+  align-self: flex-start;
+}
+
+.pattern-mask {
+  border-image-slice: 14 14 14 14;
+  border-image-width: 14px 14px 14px 14px;
+  border-image-outset: 14px 14px 14px 14px;
+  border-image-repeat: repeat repeat;
+  /* border-image-source: url("https://mdn.github.io/css-examples/tools/border-image-generator/border-image-4.png"); */
+  border-image-source: url("tmp/border.png");
+  border-style: solid; 
+}
+
+.step {
+  background-color: var(--clr-bg-600);
+  /* border-image: url('src/bgc-paper.jpg') 10; */
+  /* background-image: url('src/bgc-paper.jpg'); */
+  background-size: cover;
+
+}
+
+/* Hide all steps except the first one */
+.step:not(:first-of-type) {display: none;}
+
+.step-controls {
+  /* background-color: var(--clr-bg-300); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.step-controls button {
+  font-size: 150%;
+}
+
+
+#right-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+#right-header > .right-header-col:first-child {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .2rem;
+}
+.right-header-col > .output-field {
+  background-color: var(--clr-bg-300);
+  display: flex;
+  flex-direction: column;
+  flex-basis: calc(50% - var(--tiles-gap));
+}
+
+#profession-image-tag { 
+  width: 100%;
+  max-height: 400px; 
+}
+
+
+.rolled-output {
+  text-decoration: underline;
+}
+
+
+
 
 
 .tac { text-align: center; }
+.title { text-align: center; }
+.title::first-letter { color: #E97F02; font-size: 2rem; }
+
+.subtitle {font-style: italic;}
+.subtitle::first-letter { color: #E97F02; }
+
+.mt-1 { margin-top: .5rem; }
+
+
+
+
+
+
+.full-line {
+  --b: 8px; /* border thickness  */
+  --g: repeating-linear-gradient(45deg,#BD1550 0 10px,#E97F02 0 20px,#F8CA00 0 30px);
+  border-image: var(--g) fill 0/calc(100% - var(--b)) 0 0/0 0 0 0 repeat;
+  padding-block: .5rem;
+}

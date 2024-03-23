@@ -14,3 +14,7 @@ npm install
 ```bash
 npx webpack
 ```
+
+### Special thanks
+
+- [Temani Afif](https://github.com/Afif13/) for beautiful `border-image` rulesets

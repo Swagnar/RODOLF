@@ -6,7 +6,8 @@ export interface IProfession {
   definingSkill :ISkill,
   vigor :number,
   professionSkills :ISkill[],
-  gear :string[]
+  gear :string[],
+  img? :string
 }
 
 export const Bard :IProfession = {
@@ -25,7 +26,7 @@ export const Bard :IProfession = {
     // seduction
     Skills.INT.SocialEtiquette
   ],
-  gear: []
+  gear: [],
 }
 export const Mage :IProfession = {
   name: "Mage",
@@ -43,7 +44,8 @@ export const Mage :IProfession = {
     // seduction
     // grooming and style
   ],
-  gear: []
+  gear: [],
+  img: "tmp/mage.jpg"
 }
 export const Witcher :IProfession = {
   name: "Witcher",
@@ -61,7 +63,8 @@ export const Witcher :IProfession = {
     Skills.DEX.Stealth,
     Skills.REF.Riding
   ],
-  gear: []
+  gear: [],
+  img: "tmp/witcher.jpg"
 }
 
 
