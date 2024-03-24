@@ -51,8 +51,8 @@ export function updateOriginsOptions(originsSelectTag :HTMLSelectElement, select
 
   const originsByHomeland = Origins.reduce((acc, origin) => {
     if (!unavaiableOrigins.includes(origin.name.toLowerCase())) {
-      acc[origin.region.name] = acc[origin.region.name] || [];
-      acc[origin.region.name].push(origin);
+      acc[origin.homeland.name] = acc[origin.homeland.name] || [];
+      acc[origin.homeland.name].push(origin);
     }
     return acc;
   }, {} as { [homelandName: string]: IOrigin[] });
@@ -147,4 +147,5 @@ export function rising_embers() {
 
   loop()
 }
+
 

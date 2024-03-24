@@ -1,4 +1,4 @@
-import { IHomeland, NorthernKingdoms as NK } from "./origins.interface"
+import { IHomeland, NorthernKingdomsHomeland as NK } from "./origins.interface"
 import { IStatistic, Statistics } from "./statistics.interface"
 
 export interface IFate {

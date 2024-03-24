@@ -13,7 +13,7 @@
 
       <div class="step step1 ">
         <h2 class="title full-line">Step #1</h2>
-        <h3 class="tac subtitle mt-1">Who are you?</h3>
+        <h3 class="ribbon mt-1" style="--c: #E97F02">Who are you?</h3>
 
         <div class="input-wrapper">
           <div class="input-field first-input-row">
@@ -40,10 +40,10 @@
             <label for="gender">Sex</label>
             <div class="input-field-radio">
               <span>
-                <input type="radio" name="gender" id="gender-male-id"> M 
+                <input type="radio" name="gender" id="gender-male-id" value="Male"> M 
               </span>
               <span>
-                <input type="radio" name="gender" id="gender-female-id"> F 
+                <input type="radio" name="gender" id="gender-female-id" value="Female"> F 
               </span>
             </div>
           </div>
@@ -58,31 +58,31 @@
         <p>You've selected your origin as <span id="origin-step2-output"></span>, which means you'll get a +1 to your <span id="origin-bonus-output"></span></p>
 
         <h4 class="tac">Family</h4>
-        <div id="family-state">
-          <h5>Family state</h5>
-          <button id="roll-family-state">Roll!</button>
+        <div id="family-fate">
+          <h5>Family fate</h5>
+          <button id="roll-family-fate">Roll!</button>
           <div class="flex-row">
-            <input type="radio" name="family-state-radio" id="family-state-alive"><span>Your Family Is Alive and Together</span>
+            <input type="radio" name="family-fate-radio" id="family-fate-alive"><span>Your Family Is Alive and Together</span>
           </div>
           <div class="flex-row">
-            <input type="radio" name="family-state-radio" id="family-state-misfortune"><span>Something Happened to Your Family</span>
+            <input type="radio" name="family-fate-radio" id="family-fate-misfortune"><span>Something Happened to Your Family</span>
           </div>
         </div>
         
-        <div id="parent-state">
-          <h5>Parent state</h5>
-          <button id="roll-parent-state">Roll!</button>
+        <div id="parent-fate">
+          <h5>Parent fate</h5>
+          <button id="roll-parent-fate">Roll!</button>
           <div class="flex-row">
-            <input type="radio" name="parent-state-radio" id="parent-state-alive"><span>Your Parents Are Alive</span>
+            <input type="radio" name="parent-fate-radio" id="parent-fate-alive"><span>Your Parents Are Alive</span>
           </div>
           <div class="flex-row">
-            <input type="radio" name="parent-state-radio" id="parent-state-misfortune"><span>Something Happened To Your Parents</span>
+            <input type="radio" name="parent-fate-radio" id="parent-fate-misfortune"><span>Something Happened To Your Parents</span>
           </div>
         </div>
 
         <div id="family-fate">
-          <h5>Family fate</h5>
-          <button id="roll-family-fate">Roll!</button>
+          <h5>Family status</h5>
+          <button id="roll-family-status">Roll!</button>
           // tabelka na 26
         </div>
         
@@ -134,6 +134,16 @@
         <div class="right_header_col">          
           <img id="profession-image-tag" alt="">
         </div>      
+      </div>
+      <div id="right-body" class="mt-gap">
+        <div class="family-fate-output-wrapper">
+          <h6 class="tac subtitle"><em>Family fate</em></h6>
+          <p id="family-fate-output" class="tac"></p>
+        </div>
+        <div class="parent-fate-output-wrapper">
+          <h6 class="tac subtitle"><em>Parent fate</em></h6>
+          <p id="parent-fate-output" class="tac"></p>
+        </div>
       </div>
     </div>
   </div>

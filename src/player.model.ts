@@ -1,3 +1,4 @@
+import { Lifepath } from "./lifepath.interface"
 import { IOrigin } from "./origins.interface"
 import { IProfession } from "./professions.interface"
 import { IRace } from "./races.interface"
@@ -7,19 +8,23 @@ export interface IPlayer {
   name :string,
   age :number,
   race :IRace,
+  sex :"Male" | "Female",
   profession :IProfession,
   origin: IOrigin,
   skills: ISkill[]
+  lifepath?: Lifepath
 }
 
 export class Player implements IPlayer {
 
   skills :ISkill[]
-
+  lifepath? :Lifepath
+  
   constructor(
     public name :string,
     public age :number,
     public race :IRace,
+    public sex :"Male" | "Female",
     public profession :IProfession,
     public origin :IOrigin,
   ) {

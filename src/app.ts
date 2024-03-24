@@ -1,11 +1,12 @@
 import { IProfession, Professions } from "./professions.interface"
 import { IRace, Races } from "./races.interface"
-import { IOrigin, Origins } from "./origins.interface"
+import { IOrigin, NilfgaardHomeland, NorthernKingdomsHomeland, Origins } from "./origins.interface"
 import { Player } from "./player.model"
 
 import { returnBlankOptionTag, updateProfessionsOptions, updateOriginsOptions } from "./utils/helpers"
 import { rising_embers } from "./utils/helpers"
 import { roll20, roll10 } from "./utils/rolls"
+import { NorthernKingdomsLifepath } from "./lifepath.interface"
 
 
 const STEPS = Array.from(document.querySelectorAll('.step')).map(el => el as HTMLElement)
@@ -19,12 +20,11 @@ const AGE_TAG = <HTMLInputElement>document.getElementById('age-id')
 const RACES_TAG = <HTMLSelectElement>document.getElementById('race-id')
 const PROFESSIONS_TAG = <HTMLSelectElement>document.getElementById('profession-id')
 const ORIGINS_TAG = <HTMLSelectElement>document.getElementById('origin-id')
-
+const SEXES_TAG = document.querySelectorAll('input[type=radio][name=gender]')
 
 // Step 2
-const FAMILY_STATE = document.getElementById('family-state')
-const FAMILY_RADIO_ALIVE = <HTMLInputElement>document.getElementById('family-state-alive')
-const FAMILY_RADIO_MISFORTUNE = <HTMLInputElement>document.getElementById('family-state-misfortune')
+const FAMILY_RADIO_ALIVE = <HTMLInputElement>document.getElementById('family-fate-alive')
+const FAMILY_RADIO_MISFORTUNE = <HTMLInputElement>document.getElementById('family-fate-misfortune')
 
 const ORIGIN_OUTPUT_2 = document.getElementById('origin-step2-output')
 const ORIGIN_BONUS_OUTPUT = document.getElementById('origin-bonus-output')
@@ -34,6 +34,7 @@ const ORIGIN_BONUS_OUTPUT = document.getElementById('origin-bonus-output')
 const NAME_OUTPUT = document.getElementById('name-output')
 const AGE_OUTPUT = document.getElementById('age-output')
 const RACE_OUTPUT = document.getElementById('race-output')
+const SEX_OUTPUT = document.getElementById('gender-output')
 const PROFESSION_OUTPUT = document.getElementById('profession-output')
 const ORIGIN_OUTPUT = document.getElementById('origin-output')
 
@@ -46,6 +47,7 @@ var PLAYER :Player
 var ChosenRace :IRace  //wtf?
 var ChosenProfession :IProfession
 var ChosenOrigin :IOrigin
+var ChosenSex :"Male" | "Female"
 
 var currentStep = 0
 
@@ -66,12 +68,13 @@ function createPlayer() {
     if(!ChosenRace) throw new Error('Invalid race selected')
     if(!ChosenProfession) throw new Error('Invalid profession selected')
     if(!ChosenOrigin) throw new Error('Invalid origin selected')
-
+    if(!ChosenSex) throw new Error('Invalid sex selected')
 
     PLAYER = new Player(
       NAME_TAG.value,
       Number(AGE_TAG.value),
-      ChosenRace,      
+      ChosenRace,  
+      ChosenSex,    
       ChosenProfession, 
       ChosenOrigin
     )
@@ -99,6 +102,12 @@ function initTags(): void {
     RACES_TAG.append(opt)
   });
 
+  Array.prototype.forEach.call(SEXES_TAG, function(radio) {
+    
+    if(radio.checked) {radio.checked = false}
+    radio.addEventListener('change', handleSexChange)
+  })
+
 
   /**
    * @listens change When the player has chosen his avatar race, its interface is being searched for
@@ -119,8 +128,6 @@ function initTags(): void {
       }
     } catch(e) { console.error(e) }
   })
-
-
   /**
    * @listens change When the player has chosen his profession, display it, 
    * save it, show a image of this profession
@@ -140,9 +147,6 @@ function initTags(): void {
       }
     } catch(e) { console.error(e) }
   })
-
-
-
   ORIGINS_TAG.addEventListener('change', (e) => {
     try {
       ChosenOrigin = Origins.find(o => o.name.toLowerCase() == (e.target as HTMLSelectElement).value)
@@ -156,18 +160,29 @@ function initTags(): void {
     } catch (e) { console.error(e) }
   })
 
+
   // #1 Segfault of this app 
   NEXT_STEP_BTN.addEventListener('click', () => {
-    nextStep(currentStep)
+    if(PLAYER == undefined) {
+      alert("You can't advance further without creating a character first")
+      return
+    }
+    if(currentStep == STEPS.length - 1) {
+      alert("You can't go any forwards")
+      return
+    }
+    console.log(`nextStepEventListener <- przesłano ${currentStep}`)
+    currentStep = nextStep(currentStep)
   })
 
   // #2 Segfault of this app
   PREV_STEP_BTN.addEventListener('click', () => {
+    console.log(`prevStepEventListener <- przesłano ${currentStep}`)
     if(currentStep == 0) {
       alert("You can't go any backwards")
       return
     }
-    previousStep(currentStep)
+    currentStep = previousStep(currentStep)
   })
 
   // Me put name and age and its showing non stop, black magic
@@ -176,14 +191,23 @@ function initTags(): void {
   
   
   // How to do such rolls, how to do that...
-  document.getElementById('roll-family-state').addEventListener('click', () => {
-    const roll = roll10() % 2 == 0 ? "even" : "odd"
+  document.getElementById('roll-family-fate').addEventListener('click', () => {
+    const roll = roll10()
 
-    FAMILY_RADIO_ALIVE.checked = roll == "even"
-    FAMILY_RADIO_ALIVE.disabled = roll == "odd" 
+    const rollMod = roll % 2 == 0 ? "even" : "odd"
 
-    FAMILY_RADIO_MISFORTUNE.checked = roll == "odd" 
-    FAMILY_RADIO_MISFORTUNE.disabled = roll == "even" 
+    FAMILY_RADIO_ALIVE.checked = rollMod == "even"
+    FAMILY_RADIO_ALIVE.disabled = rollMod == "odd" 
+
+    FAMILY_RADIO_MISFORTUNE.checked = rollMod == "odd" 
+    FAMILY_RADIO_MISFORTUNE.disabled = rollMod == "even" 
+
+    if(PLAYER.origin) {
+      if(PLAYER.origin.homeland == NorthernKingdomsHomeland) {
+        PLAYER.lifepath = NorthernKingdomsLifepath
+        document.getElementById('family-fate-output').innerText = PLAYER.lifepath.getFamilyFate(roll).description
+      }
+    }
   })
   
   // ➕🧝 Button - creating a character
@@ -195,24 +219,31 @@ function initTags(): void {
   updateOriginsOptions(ORIGINS_TAG, RACES_TAG.value)
 }
 
-function previousStep(currentStep: number): void {
-  console.log(`<- przesłano ${currentStep}`)
+function previousStep(currentStep: number): number {
   if (currentStep > 0 && currentStep <= STEPS.length) {
     STEPS[currentStep].style.display = "none"
     STEPS[currentStep - 1].style.display = "block"
-    currentStep--
+    return --currentStep
   }
 }
-function nextStep(currentStep: number): void {
-  console.log(`-> przesłano ${currentStep}`)
-
-  if(PLAYER == undefined) {
-    alert("You can't advance further without creating a character first")
-    return
-  }
+function nextStep(currentStep: number): number {
   if (currentStep >= 0 && currentStep < STEPS.length - 1) {
     STEPS[currentStep].style.display = "none"
     STEPS[currentStep + 1].style.display = "block"
-    currentStep++
+    return ++currentStep
+  }
+}
+
+function handleSexChange(event) {
+  ChosenSex = event.target.value
+  SEX_OUTPUT.innerText = ChosenSex
+}
+
+function assignFamilyStatus(roll :number) {
+  if(PLAYER.origin.homeland == NorthernKingdomsHomeland) {
+    document.getElementById('family-state-output')
+  }
+  if(PLAYER.origin.homeland == NilfgaardHomeland) {
+
   }
 }

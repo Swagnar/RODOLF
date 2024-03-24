@@ -7,18 +7,18 @@ export interface IHomeland {
 
 export interface IOrigin {
   name :string,
-  region :IHomeland,
+  homeland :IHomeland,
   bonus :ISkill,
   roll :number | [number, number] | string
 }
 
-export const NorthernKingdoms :IHomeland = {
+export const NorthernKingdomsHomeland :IHomeland = {
   name: "Northern Kingdoms"
 }
-export const Nilfgaard :IHomeland = {
+export const NilfgaardHomeland :IHomeland = {
   name: "Nilfgaard"
 }
-export const Elderlands :IHomeland = {
+export const ElderlandsHomeland :IHomeland = {
   name: "Elderlands"
 }
 
@@ -27,81 +27,81 @@ export const Elderlands :IHomeland = {
 //***************************************************** */
 const Redania :IOrigin = {
   name: "Redania",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.INT.Education,
   roll: 1
 }
 const Kaedwen :IOrigin = {
   name: "Kaedwen",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.BODY.Endurance,
   roll: 2
 }
 const Temeria :IOrigin = {
   name: "Temeria",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.EMP.Charisma,
   roll: 2
 }
 const Aedirn :IOrigin = {
   name: "Aedirn",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.BODY.Endurance,
   roll: 2
 }
 const LyriaAndRivia :IOrigin = {
   name: "Lyria & Rivia",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.BODY.Endurance,
   roll: 2
 }
 const KovirAndPoviss :IOrigin = {
   name: "Kovir & Poviss",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.INT.Business,
   roll: 2
 }
 const Skellige :IOrigin = {
   name: "Skellige",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.BODY.Endurance,
   roll: 2
 }
 const Cidaris :IOrigin = {
   name: "Cidaris",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.REF.Sailing,
   roll: 2
 }
 const Verden :IOrigin = {
   name: "Verden",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.INT.WildernessSurvival,
   roll: 2
 }
 const Cintra :IOrigin = {
   name: "Cintra",
-  region: NorthernKingdoms,
+  homeland: NorthernKingdomsHomeland,
   bonus: Skills.EMP.HumanPerception,
   roll: 2
 }
 
 const Vicovaro :IOrigin = {
   name: "Vicovaro",
-  region: Nilfgaard,
+  homeland: NilfgaardHomeland,
   bonus: Skills.INT.Education,
   roll: 1
 }
 
 const DolBlathanna :IOrigin = {
   name: "Dol Blathanna",
-  region: Elderlands,
+  homeland: ElderlandsHomeland,
   bonus: Skills.INT.SocialEtiquette,
   roll: "Elf"
 }
 const Mahakam :IOrigin = {
   name: "Mahakam",
-  region: Elderlands,
+  homeland: ElderlandsHomeland,
   bonus: null,
   roll: "Dwarf"
 }
