@@ -18,3 +18,4 @@ npx webpack
 ### Special thanks
 
 - [Temani Afif](https://github.com/Afif13/) for beautiful `border-image` rulesets
+- [@Mertl](https://codepen.io/Mertl) for the rising embers animation

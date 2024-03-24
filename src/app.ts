@@ -4,6 +4,7 @@ import { IOrigin, Origins } from "./origins.interface"
 import { Player } from "./player.model"
 
 import { returnBlankOptionTag, updateProfessionsOptions, updateOriginsOptions } from "./utils/helpers"
+import { rising_embers } from "./utils/helpers"
 import { roll20, roll10 } from "./utils/rolls"
 
 
@@ -49,92 +50,8 @@ var ChosenOrigin :IOrigin
 var currentStep = 0
 
 window.addEventListener('load', () => {
-
-  var canvas = document.createElement('canvas'), 
-      c = canvas.getContext('2d')
-
-  var w = canvas.width = window.innerWidth,
-      h = canvas.height = window.innerHeight;
-
-  var particles = {},
-      particleIndex = 0,
-      particleNum = 30;
-
-  canvas.id = 'embers'
-  function particle() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height/3+h*2/3-100;
-    this.vx = Math.random() * 10 - 5;
-    this.vy = Math.random() * 10 - 5;
-    this.gravity = 0.3;
-    particleIndex++;
-    particles[particleIndex] = this;
-    this.id = particleIndex;
-    this.life = 0;
-    this.maxLife = Math.random() * 90;
-    this.shadeR = Math.floor(Math.random() * 255+150) + 50;
-    this.shadeG = Math.floor(Math.random() * 150) + 50;
-    this.shadeB = Math.floor(Math.random() * 0);
-    this.color = 'rgba(' + this.shadeR + ',' + this.shadeG + ',' + this.shadeB + ',' + Math.random() * 0.7 + ')';
-    this.size = Math.random() * 3;
-  }
-
-  particle.prototype.draw = function() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (Math.random() < 0.1) {
-      this.vx = Math.random() * 10 - 5;
-      this.vy = -2;
-    }
-  
-    this.life++;
-    if (this.life >= this.maxLife) {
-      delete particles[this.id];
-    }
-  
-    c.beginPath();
-    c.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
-    c.fillStyle = this.color;
-    c.fill();
-  };
-
-  function drawParticle() {
-    c.clearRect(0, 0,w,h);
-     for (let i = 0; i < particleNum; i++) {
-       new particle();
-     }
-     for (let i in particles) {
-       particles[i].draw();
-     }
-   }
-
-   window.requestAnimationFrame = (function() {
-    return window.requestAnimationFrame ||
-      function(callback) {
-        window.setTimeout(callback, 1000 / 60);
-        return 1
-      };
-  })();
-
-  function loop() {
-
-    window.requestAnimationFrame(loop);
-  
-    drawParticle();
-  }
-  
-  loop();
-
-
+  rising_embers()
   initTags()
-
-
-  
-  
-  
-  document.body.prepend(canvas)
-
-
 
   STEPS[currentStep].hidden = false
 
@@ -142,19 +59,7 @@ window.addEventListener('load', () => {
   //   createPlayer()
   // }
 
-
-
-
-  
-
 })
-
-
-
-
-
-
-
 
 function createPlayer() {
   try {
@@ -195,10 +100,10 @@ function initTags(): void {
   });
 
 
-
   /**
    * @listens change When the player has chosen his avatar race, its interface is being searched for
-   * in `Races` array. Races dictates what professions and Ori
+   * in `Races` array. Races dictates what professions and Origins
+   * @throws ReferenceError when races `<select>` tag has invalid `value`
    */
   RACES_TAG.addEventListener('change', (e) => {
     try {
@@ -216,7 +121,11 @@ function initTags(): void {
   })
 
 
-
+  /**
+   * @listens change When the player has chosen his profession, display it, 
+   * save it, show a image of this profession
+   * @throws ReferenceError when professions `<select>` tag has invalid `value`
+   */
   PROFESSIONS_TAG.addEventListener('change', (e) => {
     try {
       ChosenProfession = Professions.find(prof => prof.name.toLowerCase() == (e.target as HTMLSelectElement).value)
@@ -247,9 +156,12 @@ function initTags(): void {
     } catch (e) { console.error(e) }
   })
 
+  // #1 Segfault of this app 
   NEXT_STEP_BTN.addEventListener('click', () => {
     nextStep(currentStep)
   })
+
+  // #2 Segfault of this app
   PREV_STEP_BTN.addEventListener('click', () => {
     if(currentStep == 0) {
       alert("You can't go any backwards")
@@ -258,10 +170,12 @@ function initTags(): void {
     previousStep(currentStep)
   })
 
+  // Me put name and age and its showing non stop, black magic
   NAME_TAG.addEventListener('input', () => { NAME_OUTPUT.innerText = NAME_TAG.value })
   AGE_TAG.addEventListener('input', () => { AGE_OUTPUT.innerText = AGE_TAG.value })
   
   
+  // How to do such rolls, how to do that...
   document.getElementById('roll-family-state').addEventListener('click', () => {
     const roll = roll10() % 2 == 0 ? "even" : "odd"
 
@@ -272,6 +186,7 @@ function initTags(): void {
     FAMILY_RADIO_MISFORTUNE.disabled = roll == "even" 
   })
   
+  // ➕🧝 Button - creating a character
   document.getElementById('create-hero-btn').addEventListener('click', () => {
     createPlayer()
   })
@@ -301,10 +216,3 @@ function nextStep(currentStep: number): void {
     currentStep++
   }
 }
-
-
-
-
-
-
-
